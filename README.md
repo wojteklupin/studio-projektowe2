@@ -1,1 +1,2 @@
-# studio-projektowe2
+# Aplikacja do analizy ogłoszeń motoryzacyjnych
+
