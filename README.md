@@ -7,6 +7,7 @@
 /cars - zapytanie o oferty samochodów
 ```
 Dostępne parametry zapytania
+```
 page - numer strony wyszukiwania począwszy od 1 - parametr obowiązkowy!
 make - marka (parametr opcjonalny)
 minPrice - cena minimalna (parametr opcjonalny)
@@ -17,8 +18,8 @@ minMileage - przebieg minimalny (parametr opcjonalny)
 maxMileage - przebieg minimalny (parametr opcjonalny)
 sort - sortowanie (parametr opcjonalny - gdy brak, sortuje od najnowszych ogłoszeń, dla wartości parametru price sortuje według ceny)
 mode - tryb sortowania (parametr opcjonalny - używany, gdy podany parametr sort z wartością price, dla wartości desc sortuje malejąco, w przeciwnym wypadku sortuje rosnąco)
+```
 
-...
 
 ### Przykład odpowiedzi:
 ```js
