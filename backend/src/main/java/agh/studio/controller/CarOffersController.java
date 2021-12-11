@@ -1,8 +1,11 @@
 package agh.studio.controller;
 
 import agh.studio.entity.CarOffer;
+import agh.studio.entity.MotorcycleOffer;
 import agh.studio.model.CarOfferDto;
+import agh.studio.model.MotorcycleOfferDto;
 import agh.studio.repository.CarsOffersRepository;
+import agh.studio.repository.MotorcyclesOffersRepository;
 import agh.studio.service.WebScrappingService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,12 +19,16 @@ import java.util.stream.Collectors;
 public class CarOffersController {
 
     private CarsOffersRepository carsOffersRepository;
+    private MotorcyclesOffersRepository motorcyclesOffersRepository;
     private WebScrappingService webScrappingService;
 
-    public CarOffersController(CarsOffersRepository carsOffersRepository, WebScrappingService webScrappingService) {
+    public CarOffersController(CarsOffersRepository carsOffersRepository, WebScrappingService webScrappingService,
+                               MotorcyclesOffersRepository motorcyclesOffersRepository) {
         this.carsOffersRepository = carsOffersRepository;
         this.webScrappingService = webScrappingService;
+        this.motorcyclesOffersRepository = motorcyclesOffersRepository;
         webScrappingService.scrapCarOffers();
+        webScrappingService.scrapMotorcycleOffers();
     }
 
     @CrossOrigin
@@ -50,6 +57,31 @@ public class CarOffersController {
     }
 
     @CrossOrigin
+    @GetMapping("/motorcycles")
+    List<MotorcycleOfferDto> getMotorcyclesOffers(@RequestParam(required = false) String make, @RequestParam(required = false) Double minPrice,
+                                   @RequestParam(required = false) Double maxPrice, @RequestParam(required = false) Integer minYear,
+                                   @RequestParam(required = false) Integer maxYear, @RequestParam(required = false) Long minMileage,
+                                   @RequestParam(required = false) Long maxMileage, @RequestParam(required = false) String sort,
+                                   @RequestParam(required = false) String mode, @RequestParam Integer page) {
+        if (page < 1)
+            page = 1;
+        Pageable pageable = PageRequest.of(page - 1, 10);
+        List<MotorcycleOffer> result;
+        if (sort != null && sort.equals("price")) {
+            if (mode != null && mode.equals("desc"))
+                result = motorcyclesOffersRepository.findMotorcycleOffersSortedByPriceDesc(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage, pageable);
+            else
+                result = motorcyclesOffersRepository.findMotorcycleOffersSortedByPriceAsc(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage, pageable);
+        }
+        else
+            result = motorcyclesOffersRepository.findMotorcycleOffers(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage, pageable);
+
+        return result.stream()
+                .map(MotorcycleOfferDto::createFromEntity)
+                .collect(Collectors.toList());
+    }
+
+    @CrossOrigin
     @GetMapping("/rate")
     public void rateOffer(@RequestParam Long id, @RequestParam Integer rate) {
         Optional<CarOffer> carOfferOptional = carsOffersRepository.findCarOfferById(id);
@@ -60,4 +92,5 @@ public class CarOffersController {
             carsOffersRepository.save(carOffer);
         }
     }
+
 }

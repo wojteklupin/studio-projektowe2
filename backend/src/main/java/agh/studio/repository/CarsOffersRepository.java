@@ -1,7 +1,6 @@
 package agh.studio.repository;
 
 import agh.studio.entity.CarOffer;
-import com.fasterxml.jackson.annotation.OptBoolean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
