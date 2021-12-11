@@ -4,43 +4,47 @@
 ## Zakładka "Ogłoszenia":
 
 ```
-/cars?sort=newest // domyślnie
-/cars?sort=price,asc
-/cars?sort=price,desc
+/cars - zapytanie o oferty samochodów
 ```
+Dostępne parametry zapytania
+page - numer strony wyszukiwania począwszy od 1 - parametr obowiązkowy!
+make - marka (parametr opcjonalny)
+minPrice - cena minimalna (parametr opcjonalny)
+maxPrice - cena maksymalna (parametr opcjonalny)
+minYear - rok minimalny (parametr opcjonalny)
+maxYear - rok maksyamlny (parametr opcjonalny)
+minMileage - przebieg minimalny (parametr opcjonalny)
+maxMileage - przebieg minimalny (parametr opcjonalny)
+sort - sortowanie (parametr opcjonalny - gdy brak, sortuje od najnowszych ogłoszeń, dla wartości parametru price sortuje według ceny)
+mode - tryb sortowania (parametr opcjonalny - używany, gdy podany parametr sort z wartością price, dla wartości desc sortuje malejąco, w przeciwnym wypadku sortuje rosnąco)
 
-```
-/cars?offset=51 // podaje 10 kolejnych wyników, zaczynając od 51
-```
-
-### Filtry:
-```
-/cars?priceLower=5000
-/cars?priceUpper=10000
-```
-
-```
-/cars?brand=Audi,Opel,Toyota
-```
 ...
 
 ### Przykład odpowiedzi:
 ```js
 [
     {
-        "image": "http://localhost:8080/url/do/obrazka",
-        "title": "Nazwa pojazdu",
-        "description": "Krótki opis pojazdu",
-        "year": rok_produkcji,
-        "mileage": przebieg_samochodu_km,
+        "id": identyfikator ogłoszenia
+        "make": makra pojazdu,
+        "model": model pojazdu,
+        "title": tytuł ogłoszenia,
+        "description": opis pojazdu,
+        "price": cena,
+        "year": rok produkcji,
+        "mileage": przebieg samochodu w km,
+        "images": lista linków do zdjęć,
         "rate": ocena_wyliczona_przez_backend_w_skali_od_1_do_5_z_jednym_miejscem_po_przecinku,
     },
     {
-        "image": "http://localhost:8080/url/do/obrazka",
-        "title": "Nazwa pojazdu",
-        "description": "Krótki opis pojazdu",
-        "year": rok_produkcji,
-        "mileage": przebieg_samochodu_km,
+        "id": identyfikator ogłoszenia
+        "make": makra pojazdu,
+        "model": model pojazdu,
+        "title": tytuł ogłoszenia,
+        "description": opis pojazdu,
+        "price": cena,
+        "year": rok produkcji,
+        "mileage": przebieg samochodu w km,
+        "images": lista linków do zdjęć,
         "rate": ocena_wyliczona_przez_backend_w_skali_od_1_do_5_z_jednym_miejscem_po_przecinku,
     }
 ]
