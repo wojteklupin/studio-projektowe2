@@ -13,7 +13,7 @@
                                     height="130"
                                 >
                                     <v-img
-                                        src="https://ireland.apollo.olxcdn.com/v1/files/eyJmbiI6Im54a280YjI3ZGQ3NTMtT1RPTU9UT1BMIiwidyI6W3siZm4iOiJ3ZzRnbnFwNnkxZi1PVE9NT1RPUEwiLCJzIjoiMTYiLCJwIjoiMTAsLTEwIiwiYSI6IjAifV19.Q4JsgAH7aVrN3Cc9aVHRJXLNnXHjBPJ4ebaQO0y7OgE/image;s=1080x720"
+                                        :src="item.imageSrc"
                                     ></v-img>
                                 </v-list-item-avatar>
 
@@ -69,6 +69,34 @@
                         value="motorcycles"
                     ></v-radio>
                 </v-radio-group>
+
+                <v-select v-model="sortBy" :items="sortByOptions" label="Sortuj od" dense></v-select>
+                Zakres cen:
+                <v-container>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="priceLower"
+                                single-line
+                                label="Od"
+                                dense
+                                outlined
+                                type="number"
+                            />
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="priceUpper"
+                                single-line
+                                label="Do"
+                                dense
+                                outlined
+                                type="number"
+                            />
+                        </v-col>
+                    </v-row>
+                </v-container>
+                <v-select v-model="brand" :items="brands" label="Marka pojazdu" dense></v-select>
             </v-col>
         </v-row>
     </v-container>
@@ -76,71 +104,31 @@
 
 <script>
 export default {
-    data: () => ({
-        vehicleCategory: "cars",
-        items: [
-            {
-                title: "Toyota ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-            {
-                title: "Volkswagen ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-            {
-                title: "Audi ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-            {
-                title: "Opel ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-            {
-                title: "Citroen ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-            {
-                title: "Renault ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-            {
-                title: "Fiat ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-            {
-                title: "Maluch ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-            {
-                title: "Polonez ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-            {
-                title: "Mitsubishi ...",
-                description: "W doskonałym stanie, bez usterek.",
-                numbers: `2004 • 248 km`,
-                rate: "4,2",
-            },
-        ],
-    }),
+    data: () => {
+        fetch("http://localhost:3000/example.json") // fetch("http://localhost:3000/cars")
+        .then(response => response.json())
+        .then()
+        let items = []
+        for (let vehicle of vehicles) {
+            items.push({
+                title: vehicle.title,
+                description: vehicle.description,
+                numbers: `${vehicle.year} • ${vehicle.mileage} km`,
+                rate: vehicle.rate,
+                imageSrc: vehicle.image
+            })
+        }
+        return {
+            vehicleCategory: "cars",
+            priceLower: null,
+            priceUpper: null,
+            sortBy: "Najnowszych", 
+            brand: null,
+            brands: ["Audi", "Volkswagen", "Toyota", "Citroen"],
+            sortByOptions: ["Najnowszych", "Najtańszych", "Najdroższych"],
+            items: [],
+        }
+    },
 };
 </script>
 
