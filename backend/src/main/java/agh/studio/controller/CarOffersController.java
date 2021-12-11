@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -23,6 +24,7 @@ public class CarOffersController {
         webScrappingService.scrapCarOffers();
     }
 
+    @CrossOrigin
     @GetMapping("/cars")
     List<CarOfferDto> getCarOffers(@RequestParam(required = false) String make, @RequestParam(required = false) Double minPrice,
                                    @RequestParam(required = false) Double maxPrice, @RequestParam(required = false) Integer minYear,
@@ -45,5 +47,17 @@ public class CarOffersController {
         return result.stream()
                 .map(CarOfferDto::createFromEntity)
                 .collect(Collectors.toList());
+    }
+
+    @CrossOrigin
+    @GetMapping("/rate")
+    public void rateOffer(@RequestParam Long id, @RequestParam Integer rate) {
+        Optional<CarOffer> carOfferOptional = carsOffersRepository.findCarOfferById(id);
+        if (carOfferOptional.isPresent()) {
+            CarOffer carOffer = carOfferOptional.get();
+            carOffer.setNumberOfRates(carOffer.getNumberOfRates() + 1);
+            carOffer.setSumOfRates(carOffer.getSumOfRates() + rate);
+            carsOffersRepository.save(carOffer);
+        }
     }
 }

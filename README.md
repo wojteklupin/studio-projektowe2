@@ -51,6 +51,19 @@ mode - tryb sortowania (parametr opcjonalny - używany, gdy podany parametr sort
 ]
 ```
 
+...
+
+
+```
+/rate - zapytanie w celu dodania oceny do ogłoszenia
+```
+
+Obowiązkowe parametry zapytania:
+```
+id - identyfikator ogłoszenia
+rate - wystawiona ocena
+```
+
 ## Zakładka "Statystyki":
 ```
 /cars/stats

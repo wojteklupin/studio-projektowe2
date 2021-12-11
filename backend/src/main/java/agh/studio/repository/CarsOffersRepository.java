@@ -1,12 +1,14 @@
 package agh.studio.repository;
 
 import agh.studio.entity.CarOffer;
+import com.fasterxml.jackson.annotation.OptBoolean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CarsOffersRepository extends PagingAndSortingRepository<CarOffer, Long> {
 
@@ -54,4 +56,6 @@ public interface CarsOffersRepository extends PagingAndSortingRepository<CarOffe
                                               @Param("maxPrice") Double maxPrice, @Param("minYear") Integer minYear,
                                               @Param("maxYear") Integer maxYear, @Param("minMileage") Long minMileage,
                                               @Param("maxMileage") Long maxMileage, Pageable pageable);
+
+    Optional<CarOffer> findCarOfferById(Long id);
 }
