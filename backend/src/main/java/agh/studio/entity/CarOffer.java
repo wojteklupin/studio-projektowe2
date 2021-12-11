@@ -8,21 +8,25 @@ import java.util.List;
 public class CarOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String make;
-    String model;
-    String title;
+    private Long id;
+    private String make;
+    private String model;
+    private String title;
     @Column(columnDefinition = "TEXT")
-    String description;
-    Double price;
-    Integer year;
-    Long mileage;
+    private String description;
+    private Double price;
+    private Integer year;
+    private Long mileage;
     @ElementCollection
-    List<String> images;
+    private List<String> images;
+    private Double numberOfRates;
+    private Double sumOfRates;
+    private String voivodship;
 
     public CarOffer(){};
 
-    public CarOffer(String make, String title, String description, Double price, Integer year, Long mileage, List<String> images) {
+    public CarOffer(String make, String title, String description, Double price, Integer year, Long mileage,
+                    List<String> images, Double numberOfRates, Double sumOfRates, String voivodship) {
         this.make = make;
         this.title = title;
         this.description = description;
@@ -30,6 +34,9 @@ public class CarOffer {
         this.year = year;
         this.mileage = mileage;
         this.images = images;
+        this.numberOfRates = numberOfRates;
+        this.sumOfRates = sumOfRates;
+        this.voivodship = voivodship;
     }
 
     public void setId(Long id) {
@@ -68,6 +75,18 @@ public class CarOffer {
         this.images = images;
     }
 
+    public void setNumberOfRates(Double numberOfRates) {
+        this.numberOfRates = numberOfRates;
+    }
+
+    public void setSumOfRates(Double sumOfRates) {
+        this.sumOfRates = sumOfRates;
+    }
+
+    public void setVoivodship(String voivodship) {
+        this.voivodship = voivodship;
+    }
+
     public Long getId() {
         return id;
     }
@@ -102,5 +121,17 @@ public class CarOffer {
 
     public List<String> getImages() {
         return images;
+    }
+
+    public Double getNumberOfRates() {
+        return numberOfRates;
+    }
+
+    public Double getSumOfRates() {
+        return sumOfRates;
+    }
+
+    public String getVoivodship() {
+        return voivodship;
     }
 }

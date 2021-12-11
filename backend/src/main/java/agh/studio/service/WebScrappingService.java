@@ -50,6 +50,9 @@ public class WebScrappingService {
                     if (href.size() > 0)
                         scrapCarOfferDetailsPage(href.get(0).attr("href"), carOffer);
 
+                    carOffer.setNumberOfRates(0.0);
+                    carOffer.setSumOfRates(0.0);
+
                     carsOffersRepository.save(carOffer);
                 }
             }
@@ -81,6 +84,10 @@ public class WebScrappingService {
         Elements description = doc.getElementsByClass("offerDescription");
         if (description.size() > 0)
             carOffer.setDescription(description.get(0).text());
+
+        Elements voivodship = doc.getElementsByClass("region");
+        if (voivodship.size() > 0)
+            carOffer.setVoivodship(voivodship.get(0).text());
     }
 
     private String getNumberFromString(String input) {
