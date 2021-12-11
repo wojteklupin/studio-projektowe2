@@ -12,9 +12,7 @@
                                     width="200"
                                     height="130"
                                 >
-                                    <v-img
-                                        :src="item.imageSrc"
-                                    ></v-img>
+                                    <v-img :src="item.imageSrc"></v-img>
                                 </v-list-item-avatar>
 
                                 <v-list-item-content>
@@ -70,7 +68,12 @@
                     ></v-radio>
                 </v-radio-group>
 
-                <v-select v-model="sortBy" :items="sortByOptions" label="Sortuj od" dense></v-select>
+                <v-select
+                    v-model="sortBy"
+                    :items="sortByOptions"
+                    label="Sortuj od"
+                    dense
+                ></v-select>
                 Zakres cen:
                 <v-container>
                     <v-row>
@@ -96,7 +99,12 @@
                         </v-col>
                     </v-row>
                 </v-container>
-                <v-select v-model="brand" :items="brands" label="Marka pojazdu" dense></v-select>
+                <v-select
+                    v-model="brand"
+                    :items="brands"
+                    label="Marka pojazdu"
+                    dense
+                ></v-select>
             </v-col>
         </v-row>
     </v-container>
@@ -104,30 +112,67 @@
 
 <script>
 export default {
-    data: () => {
-        fetch("http://localhost:3000/example.json") // fetch("http://localhost:3000/cars")
-        .then(response => response.json())
-        .then()
-        let items = []
-        for (let vehicle of vehicles) {
-            items.push({
-                title: vehicle.title,
-                description: vehicle.description,
-                numbers: `${vehicle.year} • ${vehicle.mileage} km`,
-                rate: vehicle.rate,
-                imageSrc: vehicle.image
-            })
-        }
-        return {
-            vehicleCategory: "cars",
-            priceLower: null,
-            priceUpper: null,
-            sortBy: "Najnowszych", 
-            brand: null,
-            brands: ["Audi", "Volkswagen", "Toyota", "Citroen"],
-            sortByOptions: ["Najnowszych", "Najtańszych", "Najdroższych"],
-            items: [],
-        }
+    data: () => ({
+        vehicleCategory: "cars",
+        priceLower: null,
+        priceUpper: null,
+        sortBy: "Najnowszych",
+        brand: null,
+        brands: ["Audi", "Volkswagen", "Toyota", "Citroen"],
+        sortByOptions: ["Najnowszych", "Najtańszych", "Najdroższych"],
+        items: [],
+    }),
+    created() {
+        const fetchData = async () => {
+            let response = await fetch("http://localhost:8080/cars?page=1");
+            let vehicles = await response.json();
+
+            for (let vehicle of vehicles) {
+                this.items.push({
+                    title: vehicle.title,
+                    description: vehicle.description,
+                    numbers: `${vehicle.year} • ${vehicle.mileage} km`,
+                    rate: vehicle.rate,
+                    imageSrc: vehicle.images[0],
+                });
+            }
+        };
+
+        fetchData();
+    },
+    watch: {
+        sortBy: function (newValue) {
+            let url;
+            switch (newValue) {
+                case "Najnowszych":
+                    url = "http://localhost:8080/cars?page=1";
+                    break;
+                case "Najtańszych":
+                    url =
+                        "http://localhost:8080/cars?page=1&sort=price&mode=asc";
+                    break;
+                default:
+                    url =
+                        "http://localhost:8080/cars?page=1&sort=price&mode=desc";
+                    break;
+            }
+            fetch(url)
+                .then((response) => {
+                    response.json();
+                })
+                .then((vehicles) => {
+                    this.items = []
+                    for (let vehicle of vehicles) {
+                        this.items.push({
+                            title: vehicle.title,
+                            description: vehicle.description,
+                            numbers: `${vehicle.year} • ${vehicle.mileage} km`,
+                            rate: vehicle.rate,
+                            imageSrc: vehicle.images[0],
+                        });
+                    }
+                });
+        },
     },
 };
 </script>
