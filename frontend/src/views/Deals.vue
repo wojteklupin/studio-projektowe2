@@ -34,11 +34,7 @@
                                     <!-- <v-list-item-action-text
                             v-text="item.action"
                         ></v-list-item-action-text> -->
-                                    <span style="opacity: 0.8; color: red; font-weight: bold; font-size: 22px; position: relative; top: 10px;">{{ item.price }}</span>
-                                    <div class="rate-wrapper">
-                                        <v-icon> mdi-star-outline </v-icon>
-                                        {{ item.rate }}
-                                    </div>
+                                    <span style="opacity: 0.8; color: red; font-weight: bold; font-size: 22px;">{{ item.price }}</span>
                                 </v-list-item-action>
                                 <!-- </template> -->
                             </v-list-item>
@@ -133,7 +129,6 @@ export default {
                     title: vehicle.title,
                     description: vehicle.description,
                     numbers: `${vehicle.year} • ${vehicle.mileage} km`,
-                    rate: vehicle.rate,
                     imageSrc: vehicle.images[0],
                     price: `${vehicle.price} zł`
                 });
@@ -142,10 +137,16 @@ export default {
 
         fetchData();
     },
+    computed: {
+        filters() {
+          return `${this.priceLower}|${this.priceUpper}|${this.sortBy}|${this.brand}`;
+        },
+    },
     watch: {
-        sortBy: function (newValue) {
+        filters: function (newValue) {
+            const [newPriceLower, newPriceUpper, newSortBy, newBrand] = newValue.split('|');
             let url;
-            switch (newValue) {
+            switch (newSortBy) {
                 case "Najnowszych":
                     url = "http://localhost:8080/cars?page=1";
                     break;
@@ -158,6 +159,15 @@ export default {
                         "http://localhost:8080/cars?page=1&sort=price&mode=desc";
                     break;
             }
+            if (newPriceLower != "null") {
+                url += `&minPrice=${newPriceLower}`
+            }
+            if (newPriceUpper != "null") {
+                url += `&maxPrice=${newPriceUpper}`
+            }
+            if (newBrand != "null") {
+                url += `&make=${newBrand}`
+            }
             fetch(url)
                 .then(response => 
                     response.json()
@@ -169,13 +179,13 @@ export default {
                             title: vehicle.title,
                             description: vehicle.description,
                             numbers: `${vehicle.year} • ${vehicle.mileage} km`,
-                            rate: vehicle.rate,
                             imageSrc: vehicle.images[0],
+                            price: `${vehicle.price} zł`
                         });
                     }
                 });
         },
-    },
+    }
 };
 </script>
 
