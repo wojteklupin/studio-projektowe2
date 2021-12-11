@@ -34,6 +34,7 @@
                                     <!-- <v-list-item-action-text
                             v-text="item.action"
                         ></v-list-item-action-text> -->
+                                    <span style="opacity: 0.8; color: red; font-weight: bold; font-size: 22px; position: relative; top: 10px;">{{ item.price }}</span>
                                     <div class="rate-wrapper">
                                         <v-icon> mdi-star-outline </v-icon>
                                         {{ item.rate }}
@@ -134,6 +135,7 @@ export default {
                     numbers: `${vehicle.year} • ${vehicle.mileage} km`,
                     rate: vehicle.rate,
                     imageSrc: vehicle.images[0],
+                    price: `${vehicle.price} zł`
                 });
             }
         };
@@ -157,10 +159,10 @@ export default {
                     break;
             }
             fetch(url)
-                .then((response) => {
-                    response.json();
-                })
-                .then((vehicles) => {
+                .then(response => 
+                    response.json()
+                )
+                .then(vehicles => {
                     this.items = []
                     for (let vehicle of vehicles) {
                         this.items.push({
