@@ -5,6 +5,7 @@
             </v-col>
 
             <v-col cols="3">
+                Filtry:
             </v-col>
         </v-row>
     </v-container>
