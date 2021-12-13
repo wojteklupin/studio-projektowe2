@@ -1,7 +1,7 @@
 <template>
     <v-container style="max-width: 1200px">
         <v-row>
-            <v-col cols="9">
+            <v-col cols="10">
                 <v-list two-line flat>
                     <v-list-item-group>
                         <template v-for="(item, index) in items">
@@ -49,7 +49,7 @@
                 <div v-intersect="loadNextPage"></div>
             </v-col>
 
-            <v-col cols="3">
+            <v-col cols="2">
                 <v-radio-group v-model="vehicleCategory">
                     <template v-slot:label>
                         <div>Kategoria:</div>
@@ -170,15 +170,51 @@ export default {
         mileageUpper: null,
         sortBy: "Najnowszych",
         brand: null,
-        brands: ["Volkswagen", "Toyota", "Citroën", "Peugeot", "BMW", "Renault"],
+        brands: [],
         sortByOptions: ["Najnowszych", "Najtańszych", "Najdroższych"],
         items: [],
-        page: 1
+        page: 0
     }),
     methods: {
         loadNextPage() {
+            this.page++
+            let url;
+            switch (this.sortBy) {
+                case "Najnowszych":
+                    url = `http://localhost:8080/${this.vehicleCategory}?page=${this.page}`;
+                    break;
+                case "Najtańszych":
+                    url =
+                        `http://localhost:8080/${this.vehicleCategory}?page=${this.page}&sort=price&mode=asc`;
+                    break;
+                default:
+                    url =
+                        `http://localhost:8080/${this.vehicleCategory}?page=${this.page}&sort=price&mode=desc`;
+                    break;
+            }
+            if (this.priceLower != null) {
+                url += `&minPrice=${this.priceLower}`
+            }
+            if (this.priceUpper != null) {
+                url += `&maxPrice=${this.priceUpper}`
+            }
+            if (this.brand != null) {
+                url += `&make=${this.brand}`
+            }
+            if (this.yearLower != null) {
+                url += `&minYear=${this.yearLower}`
+            }
+            if (this.yearUpper != null) {
+                url += `&maxYear=${this.yearUpper}`
+            }
+            if (this.mileageLower != null) {
+                url += `&minMileage=${this.mileageLower}`
+            }
+            if (this.mileageUpper != null) {
+                url += `&maxMileage=${this.mileageUpper}`
+            }
             const fetchData = async () => {
-                let response = await fetch(`http://localhost:8080/cars?page=${this.page}`);
+                let response = await fetch(url);
                 let vehicles = await response.json();
 
                 for (let vehicle of vehicles) {
@@ -190,11 +226,29 @@ export default {
                         price: `${vehicle.price} zł`
                     });
                 }
-                this.page++
             };
 
             fetchData();
         }
+    },
+    created() {
+        const fetchBrands = async function(vm) {
+            let searching = true
+            let page = 1
+            let brands = new Set()
+            while (searching) {
+                searching = false
+                let response = await fetch(`http://localhost:8080/cars?page=${page}`)
+                let vehicles = await response.json()
+                for (let vehicle of vehicles) {
+                    searching = true
+                    brands.add(vehicle.make)
+                }
+                page++
+            }
+            vm.brands = Array.from(brands)
+        }
+        fetchBrands(this)
     },
     computed: {
         filters() {
@@ -206,41 +260,45 @@ export default {
             this.page = 1
             const [newVehicleCategory, newPriceLower, newPriceUpper, newSortBy, newBrand, newYearLower, newYearUpper, newMileageLower, newMileageUpper] = newValue.split('|');
             let url;
+            let options
             switch (newSortBy) {
                 case "Najnowszych":
-                    url = `http://localhost:8080/${newVehicleCategory}?page=1`;
+                    url = `http://localhost:8080/${newVehicleCategory}`;
+                    options = ""
                     break;
                 case "Najtańszych":
                     url =
-                        `http://localhost:8080/${newVehicleCategory}?page=1&sort=price&mode=asc`;
+                        `http://localhost:8080/${newVehicleCategory}`;
+                    options = "&sort=price&mode=asc"
                     break;
                 default:
                     url =
-                        `http://localhost:8080/${newVehicleCategory}?page=1&sort=price&mode=desc`;
+                        `http://localhost:8080/${newVehicleCategory}`;
+                    options = "&sort=price&mode=desc"
                     break;
             }
             if (newPriceLower != "null") {
-                url += `&minPrice=${newPriceLower}`
+                options += `&minPrice=${newPriceLower}`
             }
             if (newPriceUpper != "null") {
-                url += `&maxPrice=${newPriceUpper}`
+                options += `&maxPrice=${newPriceUpper}`
             }
             if (newBrand != "null") {
-                url += `&make=${newBrand}`
+                options += `&make=${newBrand}`
             }
             if (newYearLower != "null") {
-                url += `&minYear=${newYearLower}`
+                options += `&minYear=${newYearLower}`
             }
             if (newYearUpper != "null") {
-                url += `&maxYear=${newYearUpper}`
+                options += `&maxYear=${newYearUpper}`
             }
             if (newMileageLower != "null") {
-                url += `&minMileage=${newMileageLower}`
+                options += `&minMileage=${newMileageLower}`
             }
             if (newMileageUpper != "null") {
-                url += `&maxMileage=${newMileageUpper}`
+                options += `&maxMileage=${newMileageUpper}`
             }
-            fetch(url)
+            fetch(url + "?page=1" + options)
                 .then(response => 
                     response.json()
                 )
@@ -256,7 +314,27 @@ export default {
                         });
                     }
                 });
+            const fetchBrands = async function(vm) {
+                let searching = true
+                let page = 1
+                let brands = new Set()
+                while (searching) {
+                    searching = false
+                    let response = await fetch(url + `?page=${page}`+ options)
+                    let vehicles = await response.json()
+                    for (let vehicle of vehicles) {
+                        searching = true
+                        brands.add(vehicle.make)
+                    }
+                    page++
+                }
+                vm.brands = Array.from(brands)
+            }
+            fetchBrands(this)
         },
+        vehicleCategory: function () {
+            this.brand = null
+        }
     }
 };
 </script>

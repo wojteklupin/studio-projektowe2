@@ -27,8 +27,7 @@ export default {
     data: () => ({
         items: [
             { title: "Ogłoszenia", url: "/" },
-            { title: "Statystyki", url: "/stats" },
-            { title: "Rekomendacje", url: "/recommendations" },
+            { title: "Statystyki", url: "/stats" }
         ],
         tab: null,
     }),
