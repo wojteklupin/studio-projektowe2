@@ -46,6 +46,7 @@
                         </template>
                     </v-list-item-group>
                 </v-list>
+                <div v-intersect="loadNextPage"></div>
             </v-col>
 
             <v-col cols="3">
@@ -69,6 +70,12 @@
                     v-model="sortBy"
                     :items="sortByOptions"
                     label="Sortuj od"
+                    dense
+                ></v-select>
+                <v-select
+                    v-model="brand"
+                    :items="brands"
+                    label="Marka pojazdu"
                     dense
                 ></v-select>
                 Zakres cen:
@@ -96,12 +103,56 @@
                         </v-col>
                     </v-row>
                 </v-container>
-                <v-select
-                    v-model="brand"
-                    :items="brands"
-                    label="Marka pojazdu"
-                    dense
-                ></v-select>
+                Rok produkcji:
+                <v-container>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="yearLower"
+                                single-line
+                                label="Od"
+                                dense
+                                outlined
+                                type="number"
+                            />
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="yearUpper"
+                                single-line
+                                label="Do"
+                                dense
+                                outlined
+                                type="number"
+                            />
+                        </v-col>
+                    </v-row>
+                </v-container>
+                Przebieg pojazdu:
+                <v-container>
+                    <v-row>
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="mileageLower"
+                                single-line
+                                label="Od"
+                                dense
+                                outlined
+                                type="number"
+                            />
+                        </v-col>
+                        <v-col cols="6">
+                            <v-text-field
+                                v-model="mileageUpper"
+                                single-line
+                                label="Do"
+                                dense
+                                outlined
+                                type="number"
+                            />
+                        </v-col>
+                    </v-row>
+                </v-container>
             </v-col>
         </v-row>
     </v-container>
@@ -113,50 +164,59 @@ export default {
         vehicleCategory: "cars",
         priceLower: null,
         priceUpper: null,
+        yearLower: null,
+        yearUpper: null,
+        mileageLower: null,
+        mileageUpper: null,
         sortBy: "Najnowszych",
         brand: null,
-        brands: ["Audi", "Volkswagen", "Toyota", "Citroen"],
+        brands: ["Volkswagen", "Toyota", "Citroën", "Peugeot", "BMW", "Renault"],
         sortByOptions: ["Najnowszych", "Najtańszych", "Najdroższych"],
         items: [],
+        page: 1
     }),
-    created() {
-        const fetchData = async () => {
-            let response = await fetch("http://localhost:8080/cars?page=1");
-            let vehicles = await response.json();
+    methods: {
+        loadNextPage() {
+            const fetchData = async () => {
+                let response = await fetch(`http://localhost:8080/cars?page=${this.page}`);
+                let vehicles = await response.json();
 
-            for (let vehicle of vehicles) {
-                this.items.push({
-                    title: vehicle.title,
-                    description: vehicle.description,
-                    numbers: `${vehicle.year} • ${vehicle.mileage} km`,
-                    imageSrc: vehicle.images[0],
-                    price: `${vehicle.price} zł`
-                });
-            }
-        };
+                for (let vehicle of vehicles) {
+                    this.items.push({
+                        title: vehicle.title,
+                        description: vehicle.description,
+                        numbers: `${vehicle.year} • ${vehicle.mileage} km`,
+                        imageSrc: vehicle.images[0],
+                        price: `${vehicle.price} zł`
+                    });
+                }
+                this.page++
+            };
 
-        fetchData();
+            fetchData();
+        }
     },
     computed: {
         filters() {
-          return `${this.priceLower}|${this.priceUpper}|${this.sortBy}|${this.brand}`;
+          return `${this.vehicleCategory}|${this.priceLower}|${this.priceUpper}|${this.sortBy}|${this.brand}|${this.yearLower}|${this.yearUpper}|${this.mileageLower}|${this.mileageUpper}`;
         },
     },
     watch: {
         filters: function (newValue) {
-            const [newPriceLower, newPriceUpper, newSortBy, newBrand] = newValue.split('|');
+            this.page = 1
+            const [newVehicleCategory, newPriceLower, newPriceUpper, newSortBy, newBrand, newYearLower, newYearUpper, newMileageLower, newMileageUpper] = newValue.split('|');
             let url;
             switch (newSortBy) {
                 case "Najnowszych":
-                    url = "http://localhost:8080/cars?page=1";
+                    url = `http://localhost:8080/${newVehicleCategory}?page=1`;
                     break;
                 case "Najtańszych":
                     url =
-                        "http://localhost:8080/cars?page=1&sort=price&mode=asc";
+                        `http://localhost:8080/${newVehicleCategory}?page=1&sort=price&mode=asc`;
                     break;
                 default:
                     url =
-                        "http://localhost:8080/cars?page=1&sort=price&mode=desc";
+                        `http://localhost:8080/${newVehicleCategory}?page=1&sort=price&mode=desc`;
                     break;
             }
             if (newPriceLower != "null") {
@@ -167,6 +227,18 @@ export default {
             }
             if (newBrand != "null") {
                 url += `&make=${newBrand}`
+            }
+            if (newYearLower != "null") {
+                url += `&minYear=${newYearLower}`
+            }
+            if (newYearUpper != "null") {
+                url += `&maxYear=${newYearUpper}`
+            }
+            if (newMileageLower != "null") {
+                url += `&minMileage=${newMileageLower}`
+            }
+            if (newMileageUpper != "null") {
+                url += `&maxMileage=${newMileageUpper}`
             }
             fetch(url)
                 .then(response => 
@@ -188,9 +260,3 @@ export default {
     }
 };
 </script>
-
-<style>
-.rate-wrapper {
-    height: 24px;
-}
-</style>
