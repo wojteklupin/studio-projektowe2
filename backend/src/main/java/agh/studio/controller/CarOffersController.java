@@ -2,8 +2,7 @@ package agh.studio.controller;
 
 import agh.studio.entity.CarOffer;
 import agh.studio.entity.MotorcycleOffer;
-import agh.studio.model.CarOfferDto;
-import agh.studio.model.MotorcycleOfferDto;
+import agh.studio.model.*;
 import agh.studio.repository.CarsOffersRepository;
 import agh.studio.repository.MotorcyclesOffersRepository;
 import agh.studio.service.WebScrappingService;
@@ -12,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -82,15 +82,38 @@ public class CarOffersController {
     }
 
     @CrossOrigin
-    @GetMapping("/rate")
-    public void rateOffer(@RequestParam Long id, @RequestParam Integer rate) {
-        Optional<CarOffer> carOfferOptional = carsOffersRepository.findCarOfferById(id);
-        if (carOfferOptional.isPresent()) {
-            CarOffer carOffer = carOfferOptional.get();
-            carOffer.setNumberOfRates(carOffer.getNumberOfRates() + 1);
-            carOffer.setSumOfRates(carOffer.getSumOfRates() + rate);
-            carsOffersRepository.save(carOffer);
-        }
+    @GetMapping("/cars/stats")
+    public CarStatsDto getCarStats() {
+        CarStatsDto stats = new CarStatsDto();
+        stats.setVoivodship(carsOffersRepository.getOffersCountPerVoivodship());
+        stats.setFuel(carsOffersRepository.getOffersCountPerFuelType());
+        stats.setBody(carsOffersRepository.getOffersCountPerBody());
+        stats.setMake(carsOffersRepository.getOffersCountPerMake());
+        stats.setCapacity(carsOffersRepository.getOffersCOuntPerEngineCapacity().stream()
+                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 100))
+                .collect(Collectors.toList()));
+        stats.setPower(carsOffersRepository.getOffersCOuntPerEnginePower().stream()
+                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10))
+                .collect(Collectors.toList()));
+        stats.setPrice(carsOffersRepository.getOffersCOuntPerPrice().stream()
+                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10000))
+                .collect(Collectors.toList()));
+        return stats;
+    }
+
+    @CrossOrigin
+    @GetMapping("/motorcycles/stats")
+    public MotorcycleStatsDto getMotorcycleStats() {
+        MotorcycleStatsDto stats = new MotorcycleStatsDto();
+        stats.setVoivodship(motorcyclesOffersRepository.getOffersCountPerVoivodship());
+        stats.setMake(motorcyclesOffersRepository.getOffersCountPerMake());
+        stats.setCapacity(motorcyclesOffersRepository.getOffersCOuntPerEngineCapacity().stream()
+                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 100))
+                .collect(Collectors.toList()));
+        stats.setPrice(motorcyclesOffersRepository.getOffersCOuntPerPrice().stream()
+                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10000))
+                .collect(Collectors.toList()));
+        return stats;
     }
 
 }

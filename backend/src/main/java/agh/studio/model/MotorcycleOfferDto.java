@@ -66,9 +66,8 @@ public class MotorcycleOfferDto {
     }
 
     public static MotorcycleOfferDto createFromEntity(MotorcycleOffer motorcycleOffer) {
-        Double rate = motorcycleOffer.getNumberOfRates() != 0 ? motorcycleOffer.getSumOfRates() / motorcycleOffer.getNumberOfRates() : 0.0;
         return new MotorcycleOfferDto(motorcycleOffer.getId(), motorcycleOffer.getMake(), motorcycleOffer.getTitle(),
                 motorcycleOffer.getDescription(), motorcycleOffer.getPrice(), motorcycleOffer.getYear(), motorcycleOffer.getMileage(),
-                motorcycleOffer.getImages(), rate);
+                motorcycleOffer.getImages(), 0.0);
     }
 }

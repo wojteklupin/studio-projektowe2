@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "motorcycle_offers")
+@Table(name = "motorcycles_offers")
 public class MotorcycleOffer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,25 +18,17 @@ public class MotorcycleOffer {
     private Long mileage;
     @ElementCollection
     private List<String> images;
-    private Double numberOfRates;
-    private Double sumOfRates;
     private String voivodship;
+    private Integer engineCapcacity;
+    private Integer enginePower;
+    @Column(name = "price_category")
+    private Integer priceCategory;
+    @Column(name = "engine_capacity_category")
+    private Integer engineCapacityCategory;
+    @Column(name = "engine_power_category")
+    private Integer enginePowerCategory;
 
     public MotorcycleOffer(){};
-
-    public MotorcycleOffer(String make, String title, String description, Double price, Integer year, Long mileage,
-                    List<String> images, Double numberOfRates, Double sumOfRates, String voivodship) {
-        this.make = make;
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.year = year;
-        this.mileage = mileage;
-        this.images = images;
-        this.numberOfRates = numberOfRates;
-        this.sumOfRates = sumOfRates;
-        this.voivodship = voivodship;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -70,16 +62,28 @@ public class MotorcycleOffer {
         this.images = images;
     }
 
-    public void setNumberOfRates(Double numberOfRates) {
-        this.numberOfRates = numberOfRates;
-    }
-
-    public void setSumOfRates(Double sumOfRates) {
-        this.sumOfRates = sumOfRates;
-    }
-
     public void setVoivodship(String voivodship) {
         this.voivodship = voivodship;
+    }
+
+    public void setEngineCapcacity(Integer engineCapcacity) {
+        this.engineCapcacity = engineCapcacity;
+    }
+
+    public void setEnginePower(Integer enginePower) {
+        this.enginePower = enginePower;
+    }
+
+    public void setPriceCategory(Integer priceCategory) {
+        this.priceCategory = priceCategory;
+    }
+
+    public void setEngineCapacityCategory(Integer engineCapacityCategory) {
+        this.engineCapacityCategory = engineCapacityCategory;
+    }
+
+    public void setEnginePowerCategory(Integer enginePowerCategory) {
+        this.enginePowerCategory = enginePowerCategory;
     }
 
     public Long getId() {
@@ -114,15 +118,27 @@ public class MotorcycleOffer {
         return images;
     }
 
-    public Double getNumberOfRates() {
-        return numberOfRates;
-    }
-
-    public Double getSumOfRates() {
-        return sumOfRates;
-    }
-
     public String getVoivodship() {
         return voivodship;
+    }
+
+    public Integer getEngineCapcacity() {
+        return engineCapcacity;
+    }
+
+    public Integer getEnginePower() {
+        return enginePower;
+    }
+
+    public Integer getPriceCategory() {
+        return priceCategory;
+    }
+
+    public Integer getEngineCapacityCategory() {
+        return engineCapacityCategory;
+    }
+
+    public Integer getEnginePowerCategory() {
+        return enginePowerCategory;
     }
 }

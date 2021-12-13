@@ -72,9 +72,8 @@ public class CarOfferDto {
     }
 
     public static CarOfferDto createFromEntity(CarOffer carOffer) {
-        Double rate = carOffer.getNumberOfRates() != 0 ? carOffer.getSumOfRates() / carOffer.getNumberOfRates() : 0.0;
         return new CarOfferDto(carOffer.getId(), carOffer.getMake(), carOffer.getModel(), carOffer.getTitle(),
                 carOffer.getDescription(), carOffer.getPrice(), carOffer.getYear(), carOffer.getMileage(),
-                carOffer.getImages(), rate);
+                carOffer.getImages(), 0.0);
     }
 }

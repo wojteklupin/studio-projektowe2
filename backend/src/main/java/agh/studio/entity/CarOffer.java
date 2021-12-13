@@ -19,25 +19,22 @@ public class CarOffer {
     private Long mileage;
     @ElementCollection
     private List<String> images;
-    private Double numberOfRates;
-    private Double sumOfRates;
     private String voivodship;
+    @Column(name = "engine_capacity")
+    private Integer engineCapcacity;
+    @Column(name = "engine_power")
+    private Integer enginePower;
+    @Column(name = "fuel_type")
+    private String fuelType;
+    private String body;
+    @Column(name = "price_category")
+    private Integer priceCategory;
+    @Column(name = "engine_capacity_category")
+    private Integer engineCapacityCategory;
+    @Column(name = "engine_power_category")
+    private Integer enginePowerCategory;
 
     public CarOffer(){};
-
-    public CarOffer(String make, String title, String description, Double price, Integer year, Long mileage,
-                    List<String> images, Double numberOfRates, Double sumOfRates, String voivodship) {
-        this.make = make;
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.year = year;
-        this.mileage = mileage;
-        this.images = images;
-        this.numberOfRates = numberOfRates;
-        this.sumOfRates = sumOfRates;
-        this.voivodship = voivodship;
-    }
 
     public void setId(Long id) {
         this.id = id;
@@ -75,16 +72,36 @@ public class CarOffer {
         this.images = images;
     }
 
-    public void setNumberOfRates(Double numberOfRates) {
-        this.numberOfRates = numberOfRates;
-    }
-
-    public void setSumOfRates(Double sumOfRates) {
-        this.sumOfRates = sumOfRates;
-    }
-
     public void setVoivodship(String voivodship) {
         this.voivodship = voivodship;
+    }
+
+    public void setEngineCapcacity(Integer engineCapcacity) {
+        this.engineCapcacity = engineCapcacity;
+    }
+
+    public void setEnginePower(Integer enginePower) {
+        this.enginePower = enginePower;
+    }
+
+    public void setFuelType(String fuelType) {
+        this.fuelType = fuelType;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
+    }
+
+    public void setPriceCategory(Integer priceCategory) {
+        this.priceCategory = priceCategory;
+    }
+
+    public void setEngineCapacityCategory(Integer engineCapacityCategory) {
+        this.engineCapacityCategory = engineCapacityCategory;
+    }
+
+    public void setEnginePowerCategory(Integer enginePowerCategory) {
+        this.enginePowerCategory = enginePowerCategory;
     }
 
     public Long getId() {
@@ -123,15 +140,35 @@ public class CarOffer {
         return images;
     }
 
-    public Double getNumberOfRates() {
-        return numberOfRates;
-    }
-
-    public Double getSumOfRates() {
-        return sumOfRates;
-    }
-
     public String getVoivodship() {
         return voivodship;
+    }
+
+    public Integer getEngineCapcacity() {
+        return engineCapcacity;
+    }
+
+    public Integer getEnginePower() {
+        return enginePower;
+    }
+
+    public String getFuelType() {
+        return fuelType;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public Integer getPriceCategory() {
+        return priceCategory;
+    }
+
+    public Integer getEngineCapacityCategory() {
+        return engineCapacityCategory;
+    }
+
+    public Integer getEnginePowerCategory() {
+        return enginePowerCategory;
     }
 }
