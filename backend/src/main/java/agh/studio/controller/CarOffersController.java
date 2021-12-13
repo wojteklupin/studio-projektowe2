@@ -8,11 +8,11 @@ import agh.studio.repository.MotorcyclesOffersRepository;
 import agh.studio.service.WebScrappingService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -83,37 +83,65 @@ public class CarOffersController {
 
     @CrossOrigin
     @GetMapping("/cars/stats")
-    public CarStatsDto getCarStats() {
+    public CarStatsDto getCarStats(@RequestParam(required = false) String make, @RequestParam(required = false) Double minPrice,
+                                   @RequestParam(required = false) Double maxPrice, @RequestParam(required = false) Integer minYear,
+                                   @RequestParam(required = false) Integer maxYear, @RequestParam(required = false) Long minMileage,
+                                   @RequestParam(required = false) Long maxMileage) {
         CarStatsDto stats = new CarStatsDto();
-        stats.setVoivodship(carsOffersRepository.getOffersCountPerVoivodship());
-        stats.setFuel(carsOffersRepository.getOffersCountPerFuelType());
-        stats.setBody(carsOffersRepository.getOffersCountPerBody());
-        stats.setMake(carsOffersRepository.getOffersCountPerMake());
-        stats.setCapacity(carsOffersRepository.getOffersCOuntPerEngineCapacity().stream()
+        stats.setVoivodship(carsOffersRepository.getOffersCountPerVoivodship(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage)
+                .stream()
+                .sorted(Comparator.comparingInt(StringCountProjection::getCount).reversed())
+                .collect(Collectors.toList()));
+        stats.setFuel(carsOffersRepository.getOffersCountPerFuelType(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage)
+                .stream()
+                .sorted(Comparator.comparingInt(StringCountProjection::getCount).reversed())
+                .collect(Collectors.toList()));
+        stats.setBody(carsOffersRepository.getOffersCountPerBody(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage)
+                .stream()
+                .sorted(Comparator.comparingInt(StringCountProjection::getCount).reversed())
+                .collect(Collectors.toList()));
+        stats.setMake(carsOffersRepository.getOffersCountPerMake(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage)
+                .stream()
+                .sorted(Comparator.comparingInt(StringCountProjection::getCount).reversed())
+                .collect(Collectors.toList()));
+        stats.setCapacity(carsOffersRepository.getOffersCOuntPerEngineCapacity(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
                 .map(count -> CountStatsDto.fromIntegerCountProjection(count, 100))
+                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
                 .collect(Collectors.toList()));
-        stats.setPower(carsOffersRepository.getOffersCOuntPerEnginePower().stream()
+        stats.setPower(carsOffersRepository.getOffersCOuntPerEnginePower(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
                 .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10))
+                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
                 .collect(Collectors.toList()));
-        stats.setPrice(carsOffersRepository.getOffersCOuntPerPrice().stream()
+        stats.setPrice(carsOffersRepository.getOffersCOuntPerPrice(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
                 .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10000))
+                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
                 .collect(Collectors.toList()));
         return stats;
     }
 
     @CrossOrigin
     @GetMapping("/motorcycles/stats")
-    public MotorcycleStatsDto getMotorcycleStats() {
+    public MotorcycleStatsDto getMotorcycleStats(@RequestParam(required = false) String make, @RequestParam(required = false) Double minPrice,
+                                                 @RequestParam(required = false) Double maxPrice, @RequestParam(required = false) Integer minYear,
+                                                 @RequestParam(required = false) Integer maxYear, @RequestParam(required = false) Long minMileage,
+                                                 @RequestParam(required = false) Long maxMileage) {
         MotorcycleStatsDto stats = new MotorcycleStatsDto();
-        stats.setVoivodship(motorcyclesOffersRepository.getOffersCountPerVoivodship());
-        stats.setMake(motorcyclesOffersRepository.getOffersCountPerMake());
-        stats.setCapacity(motorcyclesOffersRepository.getOffersCOuntPerEngineCapacity().stream()
-                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 100))
+        stats.setVoivodship(motorcyclesOffersRepository.getOffersCountPerVoivodship(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage)
+                .stream()
+                .sorted(Comparator.comparingInt(StringCountProjection::getCount).reversed())
                 .collect(Collectors.toList()));
-        stats.setPrice(motorcyclesOffersRepository.getOffersCOuntPerPrice().stream()
+        stats.setMake(motorcyclesOffersRepository.getOffersCountPerMake(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage)
+                .stream()
+                .sorted(Comparator.comparingInt(StringCountProjection::getCount).reversed())
+                .collect(Collectors.toList()));
+        stats.setCapacity(motorcyclesOffersRepository.getOffersCOuntPerEngineCapacity(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
+                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 100))
+                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
+                .collect(Collectors.toList()));
+        stats.setPrice(motorcyclesOffersRepository.getOffersCOuntPerPrice(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
                 .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10000))
+                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
                 .collect(Collectors.toList()));
         return stats;
     }
-
 }

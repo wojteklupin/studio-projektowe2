@@ -6,7 +6,6 @@ public class MotorcycleStatsDto {
 
     private List<StringCountProjection> voivodship;
     private List<StringCountProjection> make;
-    private List<CountStatsDto> power;
     private List<CountStatsDto> capacity;
     private List<CountStatsDto> price;
 
@@ -18,10 +17,6 @@ public class MotorcycleStatsDto {
 
     public List<StringCountProjection> getMake() {
         return make;
-    }
-
-    public List<CountStatsDto> getPower() {
-        return power;
     }
 
     public List<CountStatsDto> getCapacity() {
@@ -38,10 +33,6 @@ public class MotorcycleStatsDto {
 
     public void setMake(List<StringCountProjection> make) {
         this.make = make;
-    }
-
-    public void setPower(List<CountStatsDto> power) {
-        this.power = power;
     }
 
     public void setCapacity(List<CountStatsDto> capacity) {

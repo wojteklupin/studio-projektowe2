@@ -58,18 +58,68 @@ public interface MotorcyclesOffersRepository extends PagingAndSortingRepository<
                                                   @Param("maxYear") Integer maxYear, @Param("minMileage") Long minMileage,
                                                   @Param("maxMileage") Long maxMileage, Pageable pageable);
 
-    @Query(value = "SELECT voivodship as label, COUNT(*) as count FROM motorcycles_offers GROUP BY voivodship ORDER BY count DESC", nativeQuery = true)
-    List<StringCountProjection> getOffersCountPerVoivodship();
+    @Query(value = "SELECT mo.voivodship as label, COUNT(*) as count FROM MotorcycleOffer mo WHERE " +
+            "(:make IS NULL OR mo.make = :make) AND " +
+            "(:minPrice IS NULL OR mo.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR mo.price <= :maxPrice) AND " +
+            "(:minYear IS NULL OR mo.year >= :minYear) AND " +
+            "(:maxYear IS NULL OR mo.year <= :maxYear) AND " +
+            "(:minMileage IS NULL OR mo.mileage >= :minMileage) AND " +
+            "(:maxMileage IS NULL OR mo.mileage <= :maxMileage) GROUP BY mo.voivodship")
+    List<StringCountProjection> getOffersCountPerVoivodship(@Param("make") String make, @Param("minPrice") Double minPrice,
+                                                            @Param("maxPrice") Double maxPrice, @Param("minYear") Integer minYear,
+                                                            @Param("maxYear") Integer maxYear, @Param("minMileage") Long minMileage,
+                                                            @Param("maxMileage") Long maxMileage);
 
-    @Query(value = "SELECT make as label, COUNT(*) as count FROM motorcycles_offers GROUP BY make ORDER BY count DESC", nativeQuery = true)
-    List<StringCountProjection> getOffersCountPerMake();
+    @Query(value = "SELECT mo.make as label, COUNT(*) as count FROM MotorcycleOffer mo WHERE " +
+            "(:make IS NULL OR mo.make = :make) AND " +
+            "(:minPrice IS NULL OR mo.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR mo.price <= :maxPrice) AND " +
+            "(:minYear IS NULL OR mo.year >= :minYear) AND " +
+            "(:maxYear IS NULL OR mo.year <= :maxYear) AND " +
+            "(:minMileage IS NULL OR mo.mileage >= :minMileage) AND " +
+            "(:maxMileage IS NULL OR mo.mileage <= :maxMileage) GROUP BY mo.make")
+    List<StringCountProjection> getOffersCountPerMake(@Param("make") String make, @Param("minPrice") Double minPrice,
+                                                      @Param("maxPrice") Double maxPrice, @Param("minYear") Integer minYear,
+                                                      @Param("maxYear") Integer maxYear, @Param("minMileage") Long minMileage,
+                                                      @Param("maxMileage") Long maxMileage);
 
-    @Query(value = "SELECT engine_power_category as category, COUNT(*) as count FROM motorcycles_offers GROUP BY engine_power_category ORDER BY count DESC", nativeQuery = true)
-    List<IntegerCountProjection> getOffersCOuntPerEnginePower();
+    @Query(value = "SELECT mo.enginePowerCategory as category, COUNT(*) as count FROM MotorcycleOffer mo WHERE " +
+            "(:make IS NULL OR mo.make = :make) AND " +
+            "(:minPrice IS NULL OR mo.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR mo.price <= :maxPrice) AND " +
+            "(:minYear IS NULL OR mo.year >= :minYear) AND " +
+            "(:maxYear IS NULL OR mo.year <= :maxYear) AND " +
+            "(:minMileage IS NULL OR mo.mileage >= :minMileage) AND " +
+            "(:maxMileage IS NULL OR mo.mileage <= :maxMileage) GROUP BY mo.enginePowerCategory")
+    List<IntegerCountProjection> getOffersCOuntPerEnginePower(@Param("make") String make, @Param("minPrice") Double minPrice,
+                                                              @Param("maxPrice") Double maxPrice, @Param("minYear") Integer minYear,
+                                                              @Param("maxYear") Integer maxYear, @Param("minMileage") Long minMileage,
+                                                              @Param("maxMileage") Long maxMileage);
 
-    @Query(value = "SELECT engine_capacity_category as category, COUNT(*) as count FROM motorcycles_offers GROUP BY engine_capacity_category ORDER BY count DESC", nativeQuery = true)
-    List<IntegerCountProjection> getOffersCOuntPerEngineCapacity();
+    @Query(value = "SELECT mo.engineCapacityCategory as category, COUNT(*) as count FROM MotorcycleOffer mo WHERE " +
+            "(:make IS NULL OR mo.make = :make) AND " +
+            "(:minPrice IS NULL OR mo.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR mo.price <= :maxPrice) AND " +
+            "(:minYear IS NULL OR mo.year >= :minYear) AND " +
+            "(:maxYear IS NULL OR mo.year <= :maxYear) AND " +
+            "(:minMileage IS NULL OR mo.mileage >= :minMileage) AND " +
+            "(:maxMileage IS NULL OR mo.mileage <= :maxMileage) GROUP BY mo.engineCapacityCategory")
+    List<IntegerCountProjection> getOffersCOuntPerEngineCapacity(@Param("make") String make, @Param("minPrice") Double minPrice,
+                                                                 @Param("maxPrice") Double maxPrice, @Param("minYear") Integer minYear,
+                                                                 @Param("maxYear") Integer maxYear, @Param("minMileage") Long minMileage,
+                                                                 @Param("maxMileage") Long maxMileage);
 
-    @Query(value = "SELECT price_category as category, COUNT(*) as count FROM motorcycles_offers GROUP BY price_category ORDER BY count DESC", nativeQuery = true)
-    List<IntegerCountProjection> getOffersCOuntPerPrice();
+    @Query(value = "SELECT mo.priceCategory as category, COUNT(*) as count FROM MotorcycleOffer mo WHERE " +
+            "(:make IS NULL OR mo.make = :make) AND " +
+            "(:minPrice IS NULL OR mo.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR mo.price <= :maxPrice) AND " +
+            "(:minYear IS NULL OR mo.year >= :minYear) AND " +
+            "(:maxYear IS NULL OR mo.year <= :maxYear) AND " +
+            "(:minMileage IS NULL OR mo.mileage >= :minMileage) AND " +
+            "(:maxMileage IS NULL OR mo.mileage <= :maxMileage) GROUP BY mo.priceCategory")
+    List<IntegerCountProjection> getOffersCOuntPerPrice(@Param("make") String make, @Param("minPrice") Double minPrice,
+                                                        @Param("maxPrice") Double maxPrice, @Param("minYear") Integer minYear,
+                                                        @Param("maxYear") Integer maxYear, @Param("minMileage") Long minMileage,
+                                                        @Param("maxMileage") Long maxMileage);
 }
