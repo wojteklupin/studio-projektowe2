@@ -144,7 +144,10 @@ Podobnie jak powyżej
 ```
 
 # Dla motocykli:
-TODO, ale pewnie bardzo podobnie.
+Analogicznie z tym, że zamiast cars jest motorcycles.
+```
+/motorcycles - zapytanie o oferty samochodów
+```
 
 # Frontend 
 
