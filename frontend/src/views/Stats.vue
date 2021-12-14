@@ -256,6 +256,24 @@ export default {
             }
         }
         fetchStats(this)
+
+        const fetchBrands = async function(vm) {
+            let searching = true
+            let page = 1
+            let brands = new Set()
+            while (searching && page <= 5) {
+                searching = false
+                let response = await fetch(`http://localhost:8080/cars?page=${page}`)
+                let vehicles = await response.json()
+                for (let vehicle of vehicles) {
+                    searching = true
+                    brands.add(vehicle.make)
+                }
+                page++
+            }
+            vm.brands = Array.from(brands)
+        }
+        fetchBrands(this)
     },
     computed: {
         filters() {
