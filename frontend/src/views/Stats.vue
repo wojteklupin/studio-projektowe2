@@ -13,7 +13,7 @@
                         </v-col>
                         <v-col cols="6">
                             <GChart
-                                type="BarChart"
+                                type="Histogram"
                                 :data="capacityChartData"
                                 :options="capacityChartOptions"
                             />
@@ -31,7 +31,7 @@
                     <v-row>
                         <v-col cols="6">
                             <GChart
-                                type="BarChart"
+                                type="Histogram"
                                 :data="priceChartData"
                                 :options="priceChartOptions"
                             />
@@ -212,14 +212,14 @@ export default {
             legend: "none"
         },
         capacityChartData: [
-            ["Pojemność silnika [cm3]", "Ilość ogłoszeń"]
+            ["Pojemność silnika [cm3]"]
         ],
         capacityChartOptions: {
             title: "Ilość ogłoszeń według pojemności silnika [cm^3]",
             legend: "none"
         },
         priceChartData: [
-            ["Cena", "Ilość ogłoszeń"]
+            ["Cena"]
         ],
         priceChartOptions: {
             title: "Ilość ogłoszeń według ceny",
@@ -237,10 +237,10 @@ export default {
                 vm.makeChartData.push([item.label, item.count])
             }
             for (let item of stats.capacity) {
-                vm.capacityChartData.push([item.label, item.count])
+                vm.capacityChartData.push([item])
             }
             for (let item of stats.price) {
-                vm.priceChartData.push([item.label, item.count])
+                vm.priceChartData.push([item])
             }
             for (let item of stats.body) {
                 vm.bodyChartData.push([item.label, item.count])
@@ -310,10 +310,10 @@ export default {
                     vm.makeChartData.push([item.label, item.count])
                 }
                 for (let item of stats.capacity) {
-                    vm.capacityChartData.push([item.label, item.count])
+                    vm.capacityChartData.push([item])
                 }
                 for (let item of stats.price) {
-                    vm.priceChartData.push([item.label, item.count])
+                    vm.priceChartData.push([item])
                 }
                 if (vm.vehicleCategory == "cars") {
                     vm.fuelChartData = [vm.fuelChartData[0]]
