@@ -261,6 +261,7 @@ export default {
             const [newVehicleCategory, newPriceLower, newPriceUpper, newSortBy, newBrand, newYearLower, newYearUpper, newMileageLower, newMileageUpper] = newValue.split('|');
             let url;
             let options
+            let brandOption = ""
             switch (newSortBy) {
                 case "Najnowszych":
                     url = `http://localhost:8080/${newVehicleCategory}`;
@@ -284,7 +285,7 @@ export default {
                 options += `&maxPrice=${newPriceUpper}`
             }
             if (newBrand != "null") {
-                options += `&make=${newBrand}`
+                brandOption = `&make=${newBrand}`
             }
             if (newYearLower != "null") {
                 options += `&minYear=${newYearLower}`
@@ -298,7 +299,7 @@ export default {
             if (newMileageUpper != "null") {
                 options += `&maxMileage=${newMileageUpper}`
             }
-            fetch(url + "?page=1" + options)
+            fetch(url + "?page=1" + options + brandOption)
                 .then(response => 
                     response.json()
                 )

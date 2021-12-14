@@ -297,7 +297,6 @@ export default {
             }
             if (newBrand != "null") {
                 url += `&make=${newBrand}`
-                url2 += `&make=${newBrand}`
             }
             if (newYearLower != "null") {
                 url += `&minYear=${newYearLower}`
