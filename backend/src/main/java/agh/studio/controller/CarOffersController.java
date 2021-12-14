@@ -109,11 +109,7 @@ public class CarOffersController {
                 .map(count -> CountStatsDto.fromIntegerCountProjection(count, 100))
                 .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
                 .collect(Collectors.toList()));
-        stats.setPower(carsOffersRepository.getOffersCOuntPerEnginePower(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
-                .filter(count -> count != null && count.getCategory() != null && count.getCount() != null)
-                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10))
-                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
-                .collect(Collectors.toList()));
+        stats.setPower(carsOffersRepository.getEnginePower(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage));
         stats.setPrice(carsOffersRepository.getOffersCOuntPerPrice(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
                 .filter(count -> count != null && count.getCategory() != null && count.getCount() != null)
                 .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10000))

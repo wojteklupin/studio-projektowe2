@@ -148,4 +148,19 @@ public interface CarsOffersRepository extends PagingAndSortingRepository<CarOffe
                                                         @Param("maxYear") Integer maxYear, @Param("minMileage") Long minMileage,
                                                         @Param("maxMileage") Long maxMileage);
 
+
+    @Query(value = "SELECT co.enginePower FROM CarOffer co WHERE " +
+            "(:make IS NULL OR co.make = :make) AND " +
+            "(:minPrice IS NULL OR co.price >= :minPrice) AND " +
+            "(:maxPrice IS NULL OR co.price <= :maxPrice) AND " +
+            "(:minYear IS NULL OR co.year >= :minYear) AND " +
+            "(:maxYear IS NULL OR co.year <= :maxYear) AND " +
+            "(:minMileage IS NULL OR co.mileage >= :minMileage) AND " +
+            "(:maxMileage IS NULL OR co.mileage <= :maxMileage)"
+    )
+    List<Integer> getEnginePower(@Param("make") String make, @Param("minPrice") Double minPrice,
+                                 @Param("maxPrice") Double maxPrice, @Param("minYear") Integer minYear,
+                                 @Param("maxYear") Integer maxYear, @Param("minMileage") Long minMileage,
+                                 @Param("maxMileage") Long maxMileage);
+
 }

@@ -8,7 +8,7 @@ public class CarStatsDto {
     private List<StringCountProjection> fuel;
     private List<StringCountProjection> body;
     private List<StringCountProjection> make;
-    private List<CountStatsDto> power;
+    private List<Integer> power;
     private List<CountStatsDto> capacity;
     private List<CountStatsDto> price;
 
@@ -31,7 +31,7 @@ public class CarStatsDto {
         this.make = make;
     }
 
-    public void setPower(List<CountStatsDto> power) {
+    public void setPower(List<Integer> power) {
         this.power = power;
     }
 
@@ -59,7 +59,7 @@ public class CarStatsDto {
         return make;
     }
 
-    public List<CountStatsDto> getPower() {
+    public List<Integer> getPower() {
         return power;
     }
 
