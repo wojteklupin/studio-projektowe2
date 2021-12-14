@@ -104,17 +104,9 @@ public class CarOffersController {
                 .stream()
                 .sorted(Comparator.comparingInt(StringCountProjection::getCount).reversed())
                 .collect(Collectors.toList()));
-        stats.setCapacity(carsOffersRepository.getOffersCOuntPerEngineCapacity(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
-                .filter(count -> count != null && count.getCategory() != null && count.getCount() != null)
-                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 100))
-                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
-                .collect(Collectors.toList()));
+        stats.setCapacity(carsOffersRepository.getEngineCpacity(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage));
         stats.setPower(carsOffersRepository.getEnginePower(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage));
-        stats.setPrice(carsOffersRepository.getOffersCOuntPerPrice(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
-                .filter(count -> count != null && count.getCategory() != null && count.getCount() != null)
-                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10000))
-                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
-                .collect(Collectors.toList()));
+        stats.setPrice(carsOffersRepository.getPrice(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage));
         return stats;
     }
 
@@ -133,16 +125,8 @@ public class CarOffersController {
                 .stream()
                 .sorted(Comparator.comparingInt(StringCountProjection::getCount).reversed())
                 .collect(Collectors.toList()));
-        stats.setCapacity(motorcyclesOffersRepository.getOffersCOuntPerEngineCapacity(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
-                .filter(count -> count != null && count.getCategory() != null && count.getCount() != null)
-                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 100))
-                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
-                .collect(Collectors.toList()));
-        stats.setPrice(motorcyclesOffersRepository.getOffersCOuntPerPrice(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage).stream()
-                .filter(count -> count != null && count.getCategory() != null && count.getCount() != null)
-                .map(count -> CountStatsDto.fromIntegerCountProjection(count, 10000))
-                .sorted(Comparator.comparingInt(CountStatsDto::getCount).reversed())
-                .collect(Collectors.toList()));
+        stats.setCapacity(motorcyclesOffersRepository.getEngineCapacity(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage));
+        stats.setPrice(motorcyclesOffersRepository.getPrice(make, minPrice, maxPrice, minYear, maxYear, minMileage, maxMileage));
         return stats;
     }
 }

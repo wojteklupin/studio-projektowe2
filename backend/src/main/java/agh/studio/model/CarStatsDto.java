@@ -9,8 +9,8 @@ public class CarStatsDto {
     private List<StringCountProjection> body;
     private List<StringCountProjection> make;
     private List<Integer> power;
-    private List<CountStatsDto> capacity;
-    private List<CountStatsDto> price;
+    private List<Integer> capacity;
+    private List<Double> price;
 
 
     public CarStatsDto(){};
@@ -35,11 +35,11 @@ public class CarStatsDto {
         this.power = power;
     }
 
-    public void setCapacity(List<CountStatsDto> capacity) {
+    public void setCapacity(List<Integer> capacity) {
         this.capacity = capacity;
     }
 
-    public void setPrice(List<CountStatsDto> price) {
+    public void setPrice(List<Double> price) {
         this.price = price;
     }
 
@@ -63,11 +63,11 @@ public class CarStatsDto {
         return power;
     }
 
-    public List<CountStatsDto> getCapacity() {
+    public List<Integer> getCapacity() {
         return capacity;
     }
 
-    public List<CountStatsDto> getPrice() {
+    public List<Double> getPrice() {
         return price;
     }
 }
