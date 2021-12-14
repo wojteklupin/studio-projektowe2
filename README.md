@@ -144,7 +144,10 @@ Podobnie jak powyżej
 ```
 
 # Dla motocykli:
-TODO, ale pewnie bardzo podobnie.
+Analogicznie z tym, że zamiast cars jest motorcycles.
+```
+/motorcycles - zapytanie o oferty motocykli
+```
 
 # Frontend 
 
@@ -155,5 +158,5 @@ npm install
 
 ## Kompilacja z użyciem innego portu niż domyślny 8080 używany przez backend
 ```
-npm run serve -- --port 3000
+npm run serve -- --port 9000
 ```

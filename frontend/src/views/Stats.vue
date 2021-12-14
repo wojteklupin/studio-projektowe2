@@ -13,38 +13,6 @@
                         </v-col>
                         <v-col cols="6">
                             <GChart
-                                type="PieChart"
-                                :data="fuelChartData"
-                                :options="fuelChartOptions"
-                            />
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="6">
-                            <GChart
-                                type="PieChart"
-                                :data="bodyChartData"
-                                :options="bodyChartOptions"
-                            />
-                        </v-col>
-                        <v-col cols="6">
-                            <GChart
-                                type="BarChart"
-                                :data="priceChartData"
-                                :options="priceChartOptions"
-                            />
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col cols="6">
-                            <GChart
-                                type="BarChart"
-                                :data="powerChartData"
-                                :options="powerChartOptions"
-                            />
-                        </v-col>
-                        <v-col cols="6">
-                            <GChart
                                 type="BarChart"
                                 :data="capacityChartData"
                                 :options="capacityChartOptions"
@@ -57,6 +25,39 @@
                                 type="ColumnChart"
                                 :data="makeChartData"
                                 :options="makeChartOptions"
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="6">
+                            <GChart
+                                type="BarChart"
+                                :data="priceChartData"
+                                :options="priceChartOptions"
+                            />
+                        </v-col>
+                        <v-col cols="6">
+                            <GChart v-if="vehicleCategory == 'cars'"
+                                type="PieChart"
+                                :data="bodyChartData"
+                                :options="bodyChartOptions"
+                            />
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col cols="6">
+                            <GChart v-if="vehicleCategory == 'cars'"
+                                type="PieChart"
+                                :data="fuelChartData"
+                                :options="fuelChartOptions"
+                            />
+                            
+                        </v-col>
+                        <v-col cols="6">
+                            <GChart v-if="vehicleCategory == 'cars'"
+                                type="Histogram"
+                                :data="powerChartData"
+                                :options="powerChartOptions"
                             />
                         </v-col>
                     </v-row>
@@ -204,7 +205,7 @@ export default {
             legend: "none"
         },
         powerChartData: [
-            ["Moc silnika [KM]", "Ilość ogłoszeń"]
+            ["Moc silnika [KM]"]
         ],
         powerChartOptions: {
             title: "Ilość ogłoszeń według mocy silnika [KM]",
@@ -232,23 +233,23 @@ export default {
             for (let item of stats.voivodship) {
                 vm.voivodshipChartData.push([item.label, item.count])
             }
-            for (let item of stats.fuel) {
-                vm.fuelChartData.push([item.label, item.count])
-            }
-            for (let item of stats.body) {
-                vm.bodyChartData.push([item.label, item.count])
-            }
             for (let item of stats.make) {
                 vm.makeChartData.push([item.label, item.count])
-            }
-            for (let item of stats.power) {
-                vm.powerChartData.push([item.label, item.count])
             }
             for (let item of stats.capacity) {
                 vm.capacityChartData.push([item.label, item.count])
             }
             for (let item of stats.price) {
                 vm.priceChartData.push([item.label, item.count])
+            }
+            for (let item of stats.body) {
+                vm.bodyChartData.push([item.label, item.count])
+            }
+            for (let item of stats.fuel) {
+                vm.fuelChartData.push([item.label, item.count])
+            }
+            for (let item of stats.power) {
+                vm.powerChartData.push([item])
             }
         }
         fetchStats(this)
@@ -298,33 +299,35 @@ export default {
                 let stats = await response.json()
 
                 vm.voivodshipChartData = [vm.voivodshipChartData[0]]
-                vm.fuelChartData = [vm.fuelChartData[0]]
-                vm.bodyChartData = [vm.bodyChartData[0]]
                 vm.makeChartData = [vm.makeChartData[0]]
-                vm.powerChartData = [vm.powerChartData[0]]
                 vm.capacityChartData = [vm.capacityChartData[0]]
                 vm.priceChartData = [vm.priceChartData[0]]
 
                 for (let item of stats.voivodship) {
                     vm.voivodshipChartData.push([item.label, item.count])
                 }
-                for (let item of stats.fuel) {
-                    vm.fuelChartData.push([item.label, item.count])
-                }
-                for (let item of stats.body) {
-                    vm.bodyChartData.push([item.label, item.count])
-                }
                 for (let item of stats.make) {
                     vm.makeChartData.push([item.label, item.count])
-                }
-                for (let item of stats.power) {
-                    vm.powerChartData.push([item.label, item.count])
                 }
                 for (let item of stats.capacity) {
                     vm.capacityChartData.push([item.label, item.count])
                 }
                 for (let item of stats.price) {
                     vm.priceChartData.push([item.label, item.count])
+                }
+                if (vm.vehicleCategory == "cars") {
+                    vm.fuelChartData = [vm.fuelChartData[0]]
+                    vm.bodyChartData = [vm.bodyChartData[0]]
+                    vm.powerChartData = [vm.powerChartData[0]]
+                    for (let item of stats.fuel) {
+                        vm.fuelChartData.push([item.label, item.count])
+                    }
+                    for (let item of stats.body) {
+                        vm.bodyChartData.push([item.label, item.count])
+                    }
+                    for (let item of stats.power) {
+                        vm.powerChartData.push([item])
+                    }
                 }
             }
             fetchStats(this)
@@ -333,7 +336,7 @@ export default {
                 let searching = true
                 let page = 1
                 let brands = new Set()
-                while (searching) {
+                while (searching && page <= 5) {
                     searching = false
                     let response = await fetch(url2 + `&page=${page}`)
                     let vehicles = await response.json()
