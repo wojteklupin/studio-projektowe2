@@ -7,7 +7,7 @@ npm install
 
 ### Compiles and hot-reloads for development with different port than default one used by backend
 ```
-npm run serve -- --port 3000
+npm run serve -- --port 9000
 ```
 
 ### Compiles and minifies for production
