@@ -146,7 +146,7 @@ Podobnie jak powyżej
 # Dla motocykli:
 Analogicznie z tym, że zamiast cars jest motorcycles.
 ```
-/motorcycles - zapytanie o oferty samochodów
+/motorcycles - zapytanie o oferty motocykli
 ```
 
 # Frontend 
