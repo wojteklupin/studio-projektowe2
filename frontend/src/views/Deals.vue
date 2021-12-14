@@ -318,7 +318,7 @@ export default {
                 let searching = true
                 let page = 1
                 let brands = new Set()
-                while (searching) {
+                while (searching && page <= 5) {
                     searching = false
                     let response = await fetch(url + `?page=${page}`+ options)
                     let vehicles = await response.json()
