@@ -1,7 +1,7 @@
 <template>
     <v-container style="max-width: 1200px">
         <v-row>
-            <v-col cols="10">
+            <v-col cols="9">
                 <v-container>
                     <v-row>
                         <v-col cols="6">
@@ -64,7 +64,7 @@
                 </v-container>
             </v-col>
 
-            <v-col cols="2">
+            <v-col cols="3">
                 <v-radio-group v-model="vehicleCategory">
                     <template v-slot:label>
                         <div>Kategoria:</div>
@@ -209,21 +209,24 @@ export default {
         ],
         powerChartOptions: {
             title: "Ilość ogłoszeń według mocy silnika [KM]",
-            legend: "none"
+            legend: "none",
+            histogram: { lastBucketPercentile: 5 }
         },
         capacityChartData: [
             ["Pojemność silnika [cm3]"]
         ],
         capacityChartOptions: {
             title: "Ilość ogłoszeń według pojemności silnika [cm^3]",
-            legend: "none"
+            legend: "none",
+            histogram: { lastBucketPercentile: 5 }
         },
         priceChartData: [
             ["Cena"]
         ],
         priceChartOptions: {
             title: "Ilość ogłoszeń według ceny",
-            legend: "none"
+            legend: "none",
+            histogram: { lastBucketPercentile: 5 }
         },
     }),
     created() {

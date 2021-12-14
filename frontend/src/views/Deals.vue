@@ -1,7 +1,7 @@
 <template>
     <v-container style="max-width: 1200px">
         <v-row>
-            <v-col cols="10">
+            <v-col cols="9">
                 <v-list two-line flat>
                     <v-list-item-group>
                         <template v-for="(item, index) in items">
@@ -49,7 +49,7 @@
                 <div v-intersect="loadNextPage"></div>
             </v-col>
 
-            <v-col cols="2">
+            <v-col cols="3">
                 <v-radio-group v-model="vehicleCategory">
                     <template v-slot:label>
                         <div>Kategoria:</div>
