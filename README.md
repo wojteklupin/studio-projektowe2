@@ -145,3 +145,15 @@ Podobnie jak powyżej
 
 # Dla motocykli:
 TODO, ale pewnie bardzo podobnie.
+
+# Frontend 
+
+## Instalacja
+```
+npm install
+```
+
+## Kompilacja z użyciem innego portu niż domyślny 8080 używany przez backend
+```
+npm run serve -- --port 3000
+```
