@@ -155,5 +155,5 @@ npm install
 
 ## Kompilacja z użyciem innego portu niż domyślny 8080 używany przez backend
 ```
-npm run serve -- --port 3000
+npm run serve -- --port 9000
 ```
